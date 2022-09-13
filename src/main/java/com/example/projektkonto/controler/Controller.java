@@ -46,7 +46,7 @@ public class Controller {
         ResponseEntity<?> responseEntity = accountService.createAndReturnAccountNumber(personalId, konto.getProductType(), konto.getAccountName());
         Success successResponse = (Success) responseEntity.getBody();
         AccountData accountData = new AccountData((AccountData) successResponse.getObject());
-        EntityModel<AccountData> resource = EntityModel.of(accountData);
+        EntityModel<Success> resource = EntityModel.of(successResponse);
         List<String> allowedAction = allowedActions();
         allowedAction.stream().forEach(action ->{
             if(action.equalsIgnoreCase("FETCHDETAILS"))

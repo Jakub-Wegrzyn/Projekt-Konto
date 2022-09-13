@@ -10,7 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CustomerService implements com.example.projektkonto.GlobalBank.CustomerService {
+public class CustomerService  {
 
     private CustomerRepository repository;
 
@@ -34,9 +34,4 @@ public class CustomerService implements com.example.projektkonto.GlobalBank.Cust
 
     }
 
-
-    @Override
-    public boolean hasCustomerFile(String personalId, String firstName, String lastName) {
-        return false;
-    }
 }

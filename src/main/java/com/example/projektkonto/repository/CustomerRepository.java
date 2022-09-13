@@ -1,18 +1,16 @@
 package com.example.projektkonto.repository;
 
-import com.example.projektkonto.model.AccountData;
+import com.example.projektkonto.GlobalBank.CustomerService;
 import com.example.projektkonto.model.CustomerData;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Random;
-import java.util.Set;
+
 
 @Repository
-public class CustomerRepository {
+public class CustomerRepository implements CustomerService {
     public HashMap<String, CustomerData> mapperson = new HashMap<String, CustomerData>();
-    public Set<Integer> set = new LinkedHashSet<Integer>();
     public Random rand = new Random();
 
     public CustomerData save(String firstName, String lastName) {
@@ -20,7 +18,7 @@ public class CustomerRepository {
         person.setFirstName(firstName);
         person.setLastName(lastName);
         String randomPersonalId = getRandomPersonalId(firstName,lastName);
-        while(set.contains(randomPersonalId)){
+        while(mapperson.containsKey(randomPersonalId)){
             randomPersonalId = getRandomPersonalId(firstName,lastName);
         }
         person.setPersonalId(randomPersonalId);
@@ -35,5 +33,16 @@ public class CustomerRepository {
         String last4Number = String.valueOf(random4number);
         String randomPersonalId = lastName3 + firstName3 + last4Number;
         return randomPersonalId;
+    }
+
+    @Override
+    public boolean hasCustomerFile(String personalId, String firstName, String lastName) {
+        if(mapperson.containsKey(personalId)){
+            return false;
+        }
+        else{
+            return true;
+        }
+
     }
 }
