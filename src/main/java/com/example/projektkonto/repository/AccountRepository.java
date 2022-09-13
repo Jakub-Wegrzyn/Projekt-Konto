@@ -1,6 +1,7 @@
 package com.example.projektkonto.repository;
 
 import com.example.projektkonto.model.AccountData;
+import com.example.projektkonto.model.CustomerData;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -24,6 +25,7 @@ public class AccountRepository {
         accountmap.put(accountnumber, konto);
         return konto;
     }
+
     public AccountData getAccount(String accountNumber){
         if(accountmap.containsKey(accountNumber)){
             return accountmap.get(accountNumber);
@@ -39,12 +41,10 @@ public class AccountRepository {
             accountmap.get(accountNumber).setAccountName(accountName);
             return accountmap.get(accountNumber);
         }
-        else if(!accountmap.containsKey(accountNumber)){
-            return null;
+        else{
+            konto = null;
+            return konto;
         }
-        konto = accountmap.get(accountNumber);
-
-        return konto;
     }
     public String delete(String accountNumber){
         String message;

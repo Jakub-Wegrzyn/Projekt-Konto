@@ -37,7 +37,15 @@ public class AccountService implements com.example.projektkonto.GlobalBank.Accou
     @Override
     public ResponseEntity<?> modifyAccountName(String accountNumber, String accountName) { //update
         AccountData accountData = repository.modfiy(accountNumber, accountName);
-        return new ResponseEntity<>(accountData, HttpStatus.OK);
+        if(accountData!= null){
+            return new ResponseEntity<>(accountData, HttpStatus.OK);
+        }
+        else{
+            ErrorService errorService = new ErrorService();
+            Error error = errorService.accountDataNotfound("Not found", null, 404);
+            return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @Override

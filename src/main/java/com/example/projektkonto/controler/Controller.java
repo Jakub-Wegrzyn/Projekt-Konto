@@ -55,7 +55,7 @@ public class Controller {
             }
             if(action.equalsIgnoreCase("MODIFY"))
             {
-                resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).modifyAccountName(new AccountData())).withRel("modify"));
+                resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).modifyAccountName(new AccountData(),accountData.getAccountNumber())).withRel("modify"));
             }
             if(action.equalsIgnoreCase("CLOSE"))
             {
@@ -82,10 +82,23 @@ public class Controller {
 
     }
 
-    @PutMapping("/modify")
-    public ResponseEntity<?> modifyAccountName(@RequestBody AccountData konto){
-        ResponseEntity<?> responseEntity = accountService.modifyAccountName(konto.getAccountNumber(), konto.getAccountName());
-        return new ResponseEntity<>(responseEntity, HttpStatus.OK);
+    @PutMapping("/modify/{accountNumber}")
+    public ResponseEntity<?> modifyAccountName(@RequestBody AccountData konto, @PathVariable String accountNumber ){
+        ResponseEntity<?> responseEntity = accountService.modifyAccountName(accountNumber, konto.getAccountName());
+        if(responseEntity.getStatusCode().equals(HttpStatus.BAD_REQUEST)){
+            ErrorService x = new ErrorService();
+            Error error =  x.accountDataNotfound("400 Not found", null,404);
+            EntityModel<Error> resource = EntityModel.of(error);
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).personalData(new CustomerData())).withRel("Create account"));
+            return new ResponseEntity<>(resource, HttpStatus.BAD_REQUEST);
+        }
+        else{
+            Success success = new Success("Success", responseEntity.getBody(), "200");
+            EntityModel<Success> resource = EntityModel.of(success);
+            resource.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(this.getClass()).find(accountNumber)).withRel("fetchDetails"));
+            return new ResponseEntity<>(resource, HttpStatus.OK);
+        }
+
 
     }
 
